@@ -1,14 +1,22 @@
 # Python
-**/__pycache__/
-**/*.pyc
-**/.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.venv/
+venv/
 
-# Env files
-**/.env
-
-# Node
-**/node_modules/
-**/.next/
+# Alembic cache
+alembic/versions/__pycache__/
 
 # OS
 .DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
