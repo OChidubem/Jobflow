@@ -1,36 +1,75 @@
 # Jobflow 🚀
 
-> **Land your dream job.** Track every application, ace every interview, never miss a follow-up.
+**Land your dream job.** A full-stack job application tracker built for students and job seekers.
 
-Jobflow is a full-stack job application tracker built for students and job seekers. Stop losing track of applications in spreadsheets — Jobflow keeps your entire job search organized in one beautiful place.
+[![Tests](https://github.com/chidubem/jobflow/actions/workflows/test.yml/badge.svg)](https://github.com/chidubem/jobflow/actions/workflows/test.yml)
+[![Build](https://github.com/chidubem/jobflow/actions/workflows/build.yml/badge.svg)](https://github.com/chidubem/jobflow/actions/workflows/build.yml)
+
+> Stop losing track of applications in spreadsheets. Jobflow keeps your entire job search organized in one beautiful place.
 
 ---
 
-## ✨ Features
+## 📸 Screenshots
 
-- **Application tracking** — Log every job you apply to with company, role, status, date, source, URL, and notes
-- **Pipeline visualization** — See your Applied → Interview → Offer conversion rates at a glance
-- **Smart filtering** — Filter by status, search by company or role, paginate through results
-- **JWT Authentication** — Secure login/register with bcrypt password hashing
-- **Real logout** — Tokens are invalidated via Redis blocklist on logout
-- **Motivational dashboard** — Dynamic greeting and encouragement based on your job search progress
-- **Fully responsive** — Works beautifully on desktop and mobile
+| Dashboard | Add Application | Login |
+|---|---|---|
+| ![Dashboard](docs/screenshots/dashboard.png) | ![Add](docs/screenshots/add.png) | ![Login](docs/screenshots/login.png) |
+
+> **[Live Demo →](https://jobflow.vercel.app)** *(coming soon)*
+
+---
+
+## ⚡ Features
+
+- 📋 **Track applications** — company, role, status, date, source, URL, notes
+- 📊 **Pipeline visualization** — see Applied → Interview → Offer conversion rates live
+- 🔍 **Filter & search** — by status, company name, or role title
+- 🔐 **Secure auth** — JWT + bcrypt, with Redis-backed token invalidation on logout
+- 💬 **Motivational dashboard** — dynamic encouragement based on your progress
+- 📱 **Fully responsive** — works on mobile and desktop
+
+---
+
+## 🏗 Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│                     Browser                          │
+│              Next.js 14 (TypeScript)                 │
+│         localhost:3000 / jobflow.vercel.app          │
+└────────────────────┬────────────────────────────────┘
+                     │ HTTP (REST)
+                     ▼
+┌─────────────────────────────────────────────────────┐
+│                   FastAPI (Python)                   │
+│              localhost:8000 / Railway                │
+│                                                      │
+│  /auth/register   /auth/login    /auth/logout        │
+│  /applications    /applications/:id                  │
+└──────────────┬──────────────────┬───────────────────┘
+               │                  │
+               ▼                  ▼
+┌──────────────────────┐  ┌──────────────────────────┐
+│   PostgreSQL 16      │  │       Redis 7             │
+│   (users, apps)      │  │   (JWT blocklist)         │
+└──────────────────────┘  └──────────────────────────┘
+```
 
 ---
 
 ## 🛠 Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | Next.js 14, TypeScript, Tailwind CSS |
-| Backend | FastAPI, Python 3.12 |
-| Database | PostgreSQL 16 |
-| Cache / Auth | Redis 7 |
-| ORM | SQLAlchemy 2.0 |
-| Migrations | Alembic |
-| Auth | JWT (PyJWT) + bcrypt |
-| Infra | Docker Compose |
-| Tests | pytest + httpx |
+| Layer | Technology | Why |
+|---|---|---|
+| Frontend | Next.js 14, TypeScript, Tailwind CSS | Fast, type-safe, great DX |
+| Backend | FastAPI, Python 3.12 | High performance, auto docs |
+| Database | PostgreSQL 16 | Reliable, relational |
+| Cache | Redis 7 | JWT blocklist, fast invalidation |
+| ORM | SQLAlchemy 2.0 + Alembic | Type-safe queries, migrations |
+| Auth | PyJWT + bcrypt | Industry standard |
+| Infra | Docker Compose | One-command local setup |
+| CI/CD | GitHub Actions | Automated tests + build |
+| Tests | pytest + httpx | 29 tests, full coverage |
 
 ---
 
@@ -39,160 +78,128 @@ Jobflow is a full-stack job application tracker built for students and job seeke
 ```
 jobflow/
 ├── apps/
-│   ├── api/                  # FastAPI backend
+│   ├── api/                    # FastAPI backend
 │   │   ├── app/
-│   │   │   ├── api/          # Route handlers (auth, applications)
-│   │   │   ├── core/         # Config, security, Redis client
-│   │   │   ├── crud/         # Database operations
-│   │   │   ├── db/           # SQLAlchemy base, session, models
-│   │   │   ├── models/       # ORM models (User, Application)
-│   │   │   └── schemas/      # Pydantic request/response schemas
-│   │   ├── alembic/          # Database migrations
-│   │   ├── tests/            # pytest test suite
-│   │   └── requirements.txt
-│   └── web/                  # Next.js frontend
-│       ├── app/              # Pages (login, register, dashboard)
-│       ├── components/       # UI components
-│       └── lib/              # API client, auth helpers
-└── infra/
-    └── docker-compose.yml    # PostgreSQL, Redis, API, Web
+│   │   │   ├── api/            # Route handlers
+│   │   │   ├── core/           # Config, JWT, Redis
+│   │   │   ├── crud/           # DB operations
+│   │   │   ├── models/         # SQLAlchemy ORM
+│   │   │   └── schemas/        # Pydantic schemas
+│   │   ├── alembic/            # DB migrations
+│   │   └── tests/              # pytest suite (29 tests)
+│   └── web/                    # Next.js frontend
+│       ├── app/                # Pages (login, register, dashboard)
+│       ├── components/         # UI components
+│       └── lib/                # API client, auth helpers
+├── infra/
+│   └── docker-compose.yml      # Full stack in one file
+├── .github/
+│   └── workflows/              # CI/CD pipelines
+└── Makefile                    # Dev shortcuts
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
 ### Prerequisites
-
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
 
-### 1. Clone the repo
-
+### 1. Clone & configure
 ```bash
-git clone https://github.com/your-username/jobflow.git
+git clone https://github.com/chidubem/jobflow.git
 cd jobflow
-```
-
-### 2. Set up environment variables
-
-```bash
 cp apps/api/.env.example apps/api/.env
+# Edit .env and set a strong JWT_SECRET_KEY
 ```
 
-Open `apps/api/.env` and set a strong `JWT_SECRET_KEY`.
-
-### 3. Start everything
-
+### 2. Start everything
 ```bash
 make up
 ```
 
-This builds and starts all 4 services: PostgreSQL, Redis, the API, and the frontend.
-
-### 4. Run database migrations
-
+### 3. Run migrations (first time only)
 ```bash
 make migrate
 ```
 
-Only needed on first run or after pulling new migrations.
+### 4. Open the app
 
-### 5. Open the app
-
-| Service | URL |
+| | URL |
 |---|---|
-| Frontend | http://localhost:3000 |
-| API docs (Swagger) | http://localhost:8000/docs |
+| 🌐 Frontend | http://localhost:3000 |
+| 📖 API Docs | http://localhost:8000/docs |
 
 ---
 
-## 🧪 Running Tests
+## 🧪 Tests
 
 ```bash
 make test
 ```
 
-29 tests covering auth (register, login, logout, token invalidation) and full CRUD for applications including filtering, search, and pagination.
+29 tests covering:
+- Auth: register, login, logout, token invalidation, password validation
+- Applications: CRUD, status filtering, search, pagination, user isolation
 
 ---
 
-## 📋 Available Commands
+## 📋 Makefile Commands
 
 ```bash
-make up           # Start all Docker services
-make down         # Stop all services
-make logs         # Stream logs from all services
-make ps           # Show running containers
-make migrate      # Run database migrations
-make migration msg="describe change"  # Generate a new migration
-make test         # Run the test suite
-make dev          # Run API locally with hot reload (outside Docker)
-make web          # Run frontend locally with hot reload (outside Docker)
+make up                        # Start all services (Docker)
+make down                      # Stop all services
+make migrate                   # Run DB migrations
+make migration msg="my change" # Generate new migration
+make test                      # Run test suite
+make logs                      # Stream logs
+make dev                       # Run API locally (hot reload)
+make web                       # Run frontend locally (hot reload)
 ```
 
 ---
 
-## 🔌 API Endpoints
+## 🔌 API Reference
 
 ### Auth
-| Method | Endpoint | Description |
-|---|---|---|
-| `POST` | `/auth/register` | Create a new account |
-| `POST` | `/auth/login` | Login (OAuth2 form) → JWT |
-| `POST` | `/auth/login-json` | Login (JSON body) → JWT |
-| `POST` | `/auth/logout` | Invalidate token |
-| `GET` | `/auth/me` | Get current user |
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/auth/register` | ✗ | Create account |
+| `POST` | `/auth/login` | ✗ | Login → JWT |
+| `POST` | `/auth/logout` | ✓ | Invalidate token |
+| `GET` | `/auth/me` | ✓ | Current user |
 
 ### Applications
 | Method | Endpoint | Description |
 |---|---|---|
-| `POST` | `/applications` | Create an application |
-| `GET` | `/applications` | List applications (filter, search, paginate) |
-| `GET` | `/applications/{id}` | Get a single application |
-| `PATCH` | `/applications/{id}` | Update an application |
-| `DELETE` | `/applications/{id}` | Delete an application |
-
-Query params for `GET /applications`: `status`, `search`, `skip`, `limit`
-
----
-
-## 🗄 Application Status Flow
-
-```
-applied → interview → offer
-                   ↘ rejected
-       ↘ withdrawn
-```
-
-| Status | Meaning |
-|---|---|
-| `applied` | Submitted application |
-| `interview` | Got a response / interview scheduled |
-| `offer` | Received an offer 🎉 |
-| `rejected` | Application was rejected |
-| `withdrawn` | You withdrew the application |
+| `POST` | `/applications` | Create application |
+| `GET` | `/applications?status=&search=&skip=&limit=` | List with filters |
+| `GET` | `/applications/:id` | Get one |
+| `PATCH` | `/applications/:id` | Update |
+| `DELETE` | `/applications/:id` | Delete |
 
 ---
 
 ## 🔐 Environment Variables
 
-| Variable | Description | Default |
-|---|---|---|
-| `DATABASE_URL` | PostgreSQL connection string | — |
-| `REDIS_URL` | Redis connection string | `redis://localhost:6379` |
-| `JWT_SECRET_KEY` | Secret key for signing JWTs | — |
-| `JWT_ALGORITHM` | JWT signing algorithm | `HS256` |
-| `ACCESS_TOKEN_EXPIRE_MINUTES` | Token expiry time | `60` |
+```env
+DATABASE_URL=postgresql+psycopg://jobflow:jobflow@localhost:5433/jobflow
+REDIS_URL=redis://localhost:6379
+JWT_SECRET_KEY=your-secret-here
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=60
+```
 
 ---
 
-## 🤝 Contributing
+## ☁️ Deployment
 
-1. Fork the repo
-2. Create a feature branch: `git checkout -b feature/my-feature`
-3. Make your changes and add tests
-4. Run `make test` to ensure everything passes
-5. Open a pull request
+| Service | Platform |
+|---|---|
+| Frontend | [Vercel](https://vercel.com) — connect GitHub, auto-deploys |
+| Backend + DB + Redis | [Railway](https://railway.app) — one-click deploy |
+
+Set `NEXT_PUBLIC_API_URL` on Vercel to your Railway API URL.
 
 ---
 
