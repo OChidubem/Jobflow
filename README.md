@@ -9,13 +9,12 @@
 
 ---
 
-## 📸 Screenshots
+## 🌐 Live
 
-| Dashboard | Add Application | Login |
-|---|---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Add](docs/screenshots/add.png) | ![Login](docs/screenshots/login.png) |
-
-> **[Live Demo →](https://jobflow-snowy.vercel.app)** | **[API Docs →](https://innovative-adaptation-production.up.railway.app/docs)**
+| | Link |
+|---|---|
+| ✨ **Frontend** | [jobflow-snowy.vercel.app](https://jobflow-snowy.vercel.app) |
+| 📖 **API Docs** | [innovative-adaptation-production.up.railway.app/docs](https://innovative-adaptation-production.up.railway.app/docs) |
 
 ---
 
