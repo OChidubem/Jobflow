@@ -15,7 +15,7 @@
 |---|---|---|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![Add](docs/screenshots/add.png) | ![Login](docs/screenshots/login.png) |
 
-> **[Live Demo →](https://jobflow.vercel.app)** *(coming soon)*
+> **[API Docs →](https://innovative-adaptation-production.up.railway.app/docs)** | **[Live Demo →](#)** *(frontend deploying to Vercel)*
 
 ---
 
