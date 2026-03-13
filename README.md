@@ -15,7 +15,7 @@
 |---|---|---|
 | ![Dashboard](docs/screenshots/dashboard.png) | ![Add](docs/screenshots/add.png) | ![Login](docs/screenshots/login.png) |
 
-> **[API Docs →](https://innovative-adaptation-production.up.railway.app/docs)** | **[Live Demo →](#)** *(frontend deploying to Vercel)*
+> **[Live Demo →](https://jobflow-snowy.vercel.app)** | **[API Docs →](https://innovative-adaptation-production.up.railway.app/docs)**
 
 ---
 
