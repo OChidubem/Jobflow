@@ -10,6 +10,10 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = "redis://localhost:6379"
 
+    # Email (Resend)
+    resend_api_key: str = ""
+    app_url: str = "http://localhost:3000"
+
     # JWT
     jwt_secret_key: str
     jwt_algorithm: str = "HS256"
