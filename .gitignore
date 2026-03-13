@@ -5,8 +5,14 @@ __pycache__/
 *.pyd
 .Python
 .env
+.env.*
+!.env.example
 .venv/
 venv/
+
+# Test artifacts
+.pytest_cache/
+test.db
 
 # Alembic cache
 alembic/versions/__pycache__/

@@ -36,7 +36,7 @@ def list_apps(
     filter_status: Optional[ApplicationStatus] = Query(None, alias="status"),
     search: Optional[str] = Query(None, description="Search by company or role"),
     skip: int = Query(0, ge=0),
-    limit: int = Query(20, ge=1, le=100),
+    limit: int = Query(20, ge=1, le=1000),
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
